@@ -76,7 +76,9 @@
 \RequirePackage[backend=biber]{biblatex}
 
 % -- Hyperlinks (loaded last among packages) ----------------------------------
-\RequirePackage[breaklinks,hidelinks]{hyperref}
+\definecolor{oxfordblue}{rgb}{0.0, 0.2, 0.5}
+\RequirePackage[breaklinks, colorlinks,
+                linkcolor=oxfordblue, citecolor=oxfordblue, urlcolor=oxfordblue]{hyperref}
 \RequirePackage{subfiles}
 
 \endinput
