@@ -1,0 +1,82 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tuftenote}[2026/03/26 Tufte-inspired note/report style]
+
+% -- Package options ----------------------------------------------------------
+\newif\if@tuftenote@showkeys
+\DeclareOption{showkeys}{\@tuftenote@showkeystrue}
+\ProcessOptions\relax
+
+% -- Encoding and language ----------------------------------------------------
+\RequirePackage[T2A]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[russian]{babel}
+\RequirePackage{csquotes}
+\RequirePackage{microtype}
+
+% -- Page geometry ------------------------------------------------------------
+\RequirePackage[a4paper, left=1.5cm, right=8cm,
+                marginparwidth=6cm, marginparsep=0.8cm]{geometry}
+\setlength{\marginparpush}{15pt}
+
+% -- Math ---------------------------------------------------------------------
+\RequirePackage{systeme, amsfonts, amsthm}
+\RequirePackage{dsfont}
+\RequirePackage[intlimits]{amsmath}
+\RequirePackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\RequirePackage{cancel}
+\RequirePackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, calc}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% -- Debug: colored equation labels -------------------------------------------
+\RequirePackage{xcolor}
+\definecolor{refkey}{rgb}{0.5,0.5,0.5}
+\definecolor{labelkey}{rgb}{0.6,0.6,0.6}
+
+\if@tuftenote@showkeys
+  \RequirePackage{showkeys}
+  \makeatletter
+  \def\SK@refcolor{\color{refkey}}
+  \def\SK@labelcolor{\color{labelkey}}
+  \makeatother
+\fi
+
+% -- Graphics -----------------------------------------------------------------
+\RequirePackage{graphicx}
+
+% -- Margin notes -------------------------------------------------------------
+\RequirePackage{ragged2e}
+
+% marginnote: unnumbered floating margin notes
+\RequirePackage{marginnote}
+\renewcommand*{\marginfont}{\footnotesize\RaggedRight}
+
+% marginpar: override to footnotesize + RaggedRight (with hyphenation)
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\RaggedLeft\footnotesize #1]%
+{\RaggedRight\footnotesize #1}}
+
+% sidenotes: numbered floating margin notes and margin figures
+\RequirePackage{sidenotes}
+\makeatletter
+\RenewDocumentCommand\sidenotetext{ o o +m }{%
+    \IfNoValueOrEmptyTF{#1}{%
+        \@sidenotes@placemarginal{#2}{\textsuperscript{\thesidenote}{}~\footnotesize#3}%
+        \refstepcounter{sidenote}%
+    }{%
+        \@sidenotes@placemarginal{#2}{\textsuperscript{#1}~#3}%
+    }%
+}
+\makeatother
+
+% -- Bibliography -------------------------------------------------------------
+\RequirePackage[backend=biber]{biblatex}
+
+% -- Hyperlinks (loaded last among packages) ----------------------------------
+\RequirePackage[breaklinks,hidelinks]{hyperref}
+\RequirePackage{subfiles}
+
+\endinput
